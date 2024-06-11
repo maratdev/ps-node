@@ -1,9 +1,9 @@
 const EventEmitter = require("events");
 const myEmitter = new EventEmitter();
-const {add} = require("../add");
-const {dividing} = require("../dividing");
-const {multiply} = require("../multiply");
-const {subtract} = require("../subtract");
+const {add} = require("../3-calc/add");
+const {dividing} = require("../3-calc/dividing");
+const {multiply} = require("../3-calc/multiply");
+const {subtract} = require("../3-calc/subtract");
 
 const [, , a, b] = process.argv;
 
