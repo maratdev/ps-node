@@ -1,20 +1,12 @@
-const filledArray = require("./filledArr.js");
+const filledArray = require("./filledArr");
 
-const arrayArrays = [];
-for (let i = 0; i <= 300000; i++) {
-    if(arrayArrays[i] % 3 === 0) {
-        arrayArrays.push(i);
-    }
+const {availableParallel} = require('os');
+const GenDivisor = () => {
+    performance.mark('start');
+    filledArray(300000, availableParallel);
+    performance.mark('end');
+    performance.measure('main', 'start', 'end');
+    console.log(performance.getEntriesByName('main'));
 }
 
-const main = () => {
-    performance.mark("start");
-
-    filledArray(arrayArrays);
-
-    performance.mark("end");
-    performance.measure("main", "start", "end");
-    console.log(performance.getEntriesByName("main"));
-};
-
-main();
+GenDivisor();
