@@ -7,6 +7,7 @@ const filePath = join(homedir(), 'weather.json')
 export const TOKEN_DICTIONARY = {
     token: 'token',
     city: 'city',
+    lang: 'lang',
 }
 
 export const saveKeyValue = async (key, value) => {
@@ -15,10 +16,12 @@ export const saveKeyValue = async (key, value) => {
         const file = await promises.readFile(filePath, 'utf8')
         data = JSON.parse(file);
     }
-
-    if (!data.city && key !== 'token') {
+    if (!data.city && key === TOKEN_DICTIONARY.city) {
         data[key] = [value]
-    } else if (data.city && key !== 'token') {
+    } else if (data.city && key === TOKEN_DICTIONARY.city) {
+        if (data.city.includes(value))  {
+            throw new Error('Conflict city')
+        }
         data[key].push(value)
     } else {
         data[key] = value

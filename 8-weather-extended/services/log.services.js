@@ -15,10 +15,11 @@ export const printHelp = () => {
             без параметров - вывод погоды
             -s [CITY] для установки города
             -h  для вывода справки
-            -е [API_KEY] для установки API_KEY`)
+            -е [API_KEY] для установки API_KEY
+            -l  установка языка 'ru' или 'en'`)
 }
 
-export const printWeather = (res, icon) => {
+export const printWeatherRu = (res, icon) => {
     const descToUpper= res.weather[0].description.charAt(0).toUpperCase() + res.weather[0].description.slice(1)
     console.log(
         dedent`${chalk.bgYellowBright(' WEATHER ')}
@@ -26,5 +27,15 @@ export const printWeather = (res, icon) => {
             ${icon} ${descToUpper}
             Влажность: ${res.main.humidity}%
             Скорость ветра: ${res.wind.speed}`
+    )
+}
+export const printWeather = (res, icon) => {
+    const descToUpper= res.weather[0].description.charAt(0).toUpperCase() + res.weather[0].description.slice(1)
+    console.log(
+        dedent`${chalk.bgYellowBright(' WEATHER ')}
+            Weather in the city ${res.name}:
+            ${icon} ${descToUpper}
+            Humidity: ${res.main.humidity}%
+            Wind speed: ${res.wind.speed}`
     )
 }
