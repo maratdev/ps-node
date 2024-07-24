@@ -1,6 +1,9 @@
 import chalk from 'chalk'
 import dedent from "dedent-js";
 
+const descToUpper = (str: Record<string, any>) => {
+    return str.weather[0].description.charAt(0).toUpperCase() + str.weather[0].description.slice(1)
+}
 
 interface Weather {
     weather: { description: string; } [];
@@ -29,21 +32,19 @@ export const printHelp = () => {
 }
 
 export const printWeatherRu = (res: Weather, icon: string | undefined) => {
-    const descToUpper = res.weather[0].description.charAt(0).toUpperCase() + res.weather[0].description.slice(1)
     console.log(
         dedent`${chalk.bgYellowBright(' WEATHER ')}
             Погода в городе ${res.name}:
-            ${icon} ${descToUpper}
+            ${icon} ${descToUpper(res)}
             Влажность: ${res.main.humidity}%
             Скорость ветра: ${res.wind.speed}`
     )
 }
 export const printWeather = (res: Weather, icon: string | undefined) => {
-    const descToUpper = res.weather[0].description.charAt(0).toUpperCase() + res.weather[0].description.slice(1)
     console.log(
         dedent`${chalk.bgYellowBright(' WEATHER ')}
             Weather in the city ${res.name}:
-            ${icon} ${descToUpper}
+            ${icon} ${descToUpper(res)}
             Humidity: ${res.main.humidity}%
             Wind speed: ${res.wind.speed}`
     )

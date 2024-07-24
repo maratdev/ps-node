@@ -18,23 +18,23 @@ export const printHelp = () => {
             -е [API_KEY] для установки API_KEY
             -l  установка языка 'ru' или 'en'`)
 }
-
+const descToUpper = (str) => {
+  return str.weather[0].description.charAt(0).toUpperCase() + str.weather[0].description.slice(1)
+}
 export const printWeatherRu = (res, icon) => {
-    const descToUpper= res.weather[0].description.charAt(0).toUpperCase() + res.weather[0].description.slice(1)
     console.log(
         dedent`${chalk.bgYellowBright(' WEATHER ')}
             Погода в городе ${res.name}:
-            ${icon} ${descToUpper}
+            ${icon} ${descToUpper(res)}
             Влажность: ${res.main.humidity}%
             Скорость ветра: ${res.wind.speed}`
     )
 }
 export const printWeather = (res, icon) => {
-    const descToUpper= res.weather[0].description.charAt(0).toUpperCase() + res.weather[0].description.slice(1)
     console.log(
         dedent`${chalk.bgYellowBright(' WEATHER ')}
             Weather in the city ${res.name}:
-            ${icon} ${descToUpper}
+            ${icon} ${descToUpper(res)}
             Humidity: ${res.main.humidity}%
             Wind speed: ${res.wind.speed}`
     )

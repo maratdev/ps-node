@@ -52,19 +52,23 @@ const saveCity = async (city: string) => {
 
 const getForCast = async () => {
     try {
+        const chunk = (arr: string[], size: number) => Array.from(Array(Math.ceil(arr.length / size)), (i) => arr.slice(i * size, i * size + size));
         const cities=  process.env.CITY ??await getKeyValue(TOKEN_DICTIONARY.city);
         const lang = process.env.LANG ?? await getKeyValue(TOKEN_DICTIONARY.lang);
         if (!cities) {
             printError('City is required');
         }
         if (Array.isArray(cities) && cities.length) {
-            await Promise.all(cities?.map(async (city: string) => {
-                let weather = await getWeather(city, <string>lang);
-                if (lang === 'ru' || !lang) {
-                    return printWeatherRu(weather, getIcon(weather.weather[0].icon));
-                }
-                printWeather(weather, getIcon(weather.weather[0].icon));
-            }))
+            for (let dataChunk of chunk(cities, 20)) {
+                await Promise.all(dataChunk.map(async (city: string) => {
+                    const weather = await getWeather(city, <string>lang);
+                    if (lang === 'ru' || !lang) {
+                        return printWeatherRu(weather, getIcon(weather.weather[0].icon));
+                    }
+                    printWeather(weather, getIcon(weather.weather[0].icon));
+                }))
+
+            }
         }
 
     } catch (err) {

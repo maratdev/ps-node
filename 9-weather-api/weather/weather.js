@@ -2,7 +2,6 @@ import {getKeyValue, saveKeyValue, TOKEN_DICTIONARY} from "./services/storage.se
 import {getWeather} from "./services/api.service.js";
 import {printWeather} from "./services/log.services.js";
 
-
 export const saveData = async (req, res) => {
     const data = req.body;
     if (!data.city || !data.token) {
@@ -29,15 +28,18 @@ export const saveData = async (req, res) => {
 
 export const getForCast = async (req, res) => {
     try {
+        const chunk = (arr, size) => Array.from(Array(Math.ceil(arr.length / size)), (el, i) => arr.slice(i * size, i * size + size));
         const cities = process.env.CITY ?? await getKeyValue(TOKEN_DICTIONARY.city);
         const lang = process.env.LANG ?? await getKeyValue(TOKEN_DICTIONARY.lang);
         if (!cities) {
             res.status(400).send('City is required')
         }
-        await Promise.all(cities.map(async (city) => {
-            let weather = await getWeather(city, lang);
-            res.send(printWeather(weather));
-        }))
+        for (let dataChunk of chunk(cities, 20)) {
+            await Promise.all(dataChunk.map(async (city) => {
+                const weather = await getWeather(city, lang);
+                res.send(printWeather(weather));
+            }))
+        }
 
     } catch (e) {
         if (e?.response?.status === 404) {
